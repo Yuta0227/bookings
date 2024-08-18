@@ -1,41 +1,4 @@
 {{ template "base" }}
 {{ define "content" }}
-<div class="container">
 
-  <div class="row">
-    <div class="col-md-6 mx-auto">
-      <h1 class="mt-5">
-        Search for Availability
-      </h1>
-      <form action="/make-reservation" method="get">
-        <div class="row">
-          <div class="col">
-            <label for="start_date" class="form-label">Starting Date</label>
-            <input required type="date" class="form-control" name="start_date" id="start_date"
-              aria-describedby="startDateHelp">
-            <div id="startDateHelp" class="form-text">Enter your starting date in the form of YYYY-MM-DD</div>
-          </div>
-          <div class="col">
-            <label for="end_date" class="form-label">Ending Date</label>
-            <input required type="date" class="form-control" name="end_date" id="end_date"
-              aria-describedby="endDateHelp">
-            <div id="endDateHelp" class="form-text">Enter your ending date in the form of YYYY-MM-DD</div>
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
-    </div>
-  </div>
-</div>
-<div class="row my-footer">
-  <div class="col">
-    left
-  </div>
-  <div class="col">
-    middle
-  </div>
-  <div class="col">
-    right
-  </div>
-</div>
 {{ end }}
