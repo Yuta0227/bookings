@@ -1,29 +1,45 @@
 {{ template "base" }}
 {{ define "content" }}
 <div class="container">
-
   <div class="row">
     <div class="col-md-6 mx-auto">
       <h1 class="mt-5">
         Search for Availability
       </h1>
-      <form action="/make-reservation" method="get">
+      <form action="/reservation" method="get" class="needs-validation" novalidate>
         <div class="row">
           <div class="col">
             <label for="start_date" class="form-label">Starting Date</label>
             <input required type="date" class="form-control" name="start_date" id="start_date"
               aria-describedby="startDateHelp">
             <div id="startDateHelp" class="form-text">Enter your starting date in the form of YYYY-MM-DD</div>
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+            <div class="invalid-feedback">
+              Please provide a valid date.
+            </div>
           </div>
           <div class="col">
             <label for="end_date" class="form-label">Ending Date</label>
             <input required type="date" class="form-control" name="end_date" id="end_date"
               aria-describedby="endDateHelp">
             <div id="endDateHelp" class="form-text">Enter your ending date in the form of YYYY-MM-DD</div>
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+            <div class="invalid-feedback">
+              Please provide a valid date.
+            </div>
           </div>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <p id="myParagraph">This is a paragraph</p>
     </div>
   </div>
 </div>
@@ -38,4 +54,24 @@
     right
   </div>
 </div>
+<script>
+  (() => {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()
+</script>
 {{ end }}
