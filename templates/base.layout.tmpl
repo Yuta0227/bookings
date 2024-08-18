@@ -10,6 +10,8 @@
     integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker-bs5.min.css">
   <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
+
   {{ block "css" . }}
   {{ end }}
   <style>
@@ -43,20 +45,23 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/">Home</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/about">About</a>
+          </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Dropdown
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/rooms/generals-quarters">General's Quarters</a></li>
-              <li><a class="dropdown-item" href="/rooms/majors-suite">Major's Suite</a></li>
+              <li><a class="dropdown-item" href="/generals-quarters">General's Quarters</a></li>
+              <li><a class="dropdown-item" href="/majors-suite">Major's Suite</a></li>
             </ul>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/contact">Contact</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/reservation">Book Now</a>
+            <a class="nav-link" href="/search-availability">Book Now</a>
           </li>
         </ul>
         <form class="d-flex" role="search">
@@ -69,11 +74,145 @@
   {{ block "content" . }}
 
   {{ end }}
+  <div class="row my-footer">
+    <div class="col">
+      left
+    </div>
+    <div class="col">
+      middle
+    </div>
+    <div class="col">
+      right
+    </div>
+  </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
   integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js"></script>
 <script src="https://unpkg.com/notie"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+<script>
+  let attention = Prompt();
+  function notify(msg, msgType) {
+    notie.alert({
+      type: msgType,
+      text: msg,
+    })
+  }
+  function notifyModal(title, text, icon, confirmationButtonText) {
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: icon,
+      confirmButtonText: confirmationButtonText
+    })
+  }
+  function Prompt() {
+    let toast = function (c) {
+      const {
+        msg = '',
+        icon = 'success',
+        position = 'top-end',
+
+      } = c;
+
+      const Toast = Swal.mixin({
+        toast: true,
+        title: msg,
+        position: position,
+        icon: icon,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
+
+      Toast.fire({})
+    }
+
+    let success = function (c) {
+      const {
+        msg = "",
+        title = "",
+        footer = "",
+      } = c
+
+      Swal.fire({
+        icon: 'success',
+        title: title,
+        text: msg,
+        footer: footer,
+      })
+
+    }
+
+    let error = function (c) {
+      const {
+        msg = "",
+        title = "",
+        footer = "",
+      } = c
+
+      Swal.fire({
+        icon: 'error',
+        title: title,
+        text: msg,
+        footer: footer,
+      })
+
+    }
+
+    async function custom(c) {
+      const {
+        msg = "",
+        title = "",
+      } = c;
+
+      const { value: formValues } = await Swal.fire({
+        title: title,
+        html: msg,
+        backdrop: false,
+        focusConfirm: false,
+        showCancelButton: true,
+        willOpen: () => {
+          const elem = document.getElementById("reservation-dates-modal");
+          const rp = new DateRangePicker(elem, {
+            format: 'yyyy-mm-dd',
+            showOnFocus: true,
+          })
+        },
+        didOpen: () => {
+          document.getElementById("start").removeAttribute("disabled");
+          document.getElementById("end").removeAttribute("disabled");
+        },
+        preConfirm: () => {
+          return [
+            document.getElementById('start').value,
+            document.getElementById('end').value
+          ]
+        }
+      })
+
+      if (formValues) {
+        Swal.fire(JSON.stringify(formValues))
+      }
+    }
+
+    return {
+      toast: toast,
+      success: success,
+      error: error,
+      custom: custom,
+    }
+  }
+
+
+</script>
+{{ block "js" . }}
+{{ end }}
 
 </html>
 {{ end }}
