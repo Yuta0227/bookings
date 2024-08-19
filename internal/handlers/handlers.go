@@ -1,11 +1,14 @@
 package handlers
 
 import (
-	"github.com/Yuta0227/bookings/pkg/config"
-	"github.com/Yuta0227/bookings/pkg/models"
-	"github.com/Yuta0227/bookings/pkg/render"
-	"net/http"
+	"encoding/json"
 	"fmt"
+	"log"
+	"net/http"
+
+	"github.com/Yuta0227/bookings/internal/config"
+	"github.com/Yuta0227/bookings/internal/models"
+	"github.com/Yuta0227/bookings/internal/render"
 )
 
 // Repository is the repository type
@@ -69,6 +72,24 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	start := r.Form.Get("start")
 	end := r.Form.Get("end")
 	w.Write([]byte(fmt.Sprintf("start date is %s and end date is %s", start, end)))
+}
+
+type jsonResponse struct {
+	OK      bool   `json:"ok"`
+	Message string `json:"message"`
+}
+
+func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
+	resp := jsonResponse{
+		OK:      true,
+		Message: "Available!",
+	}
+	out, err := json.MarshalIndent(resp, "", "     ")
+	if err != nil {
+		log.Println(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
 }
 
 func (m *Repository) MakeReservation(w http.ResponseWriter, r *http.Request) {

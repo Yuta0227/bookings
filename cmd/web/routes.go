@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	// Importing custom configuration package
-	"github.com/Yuta0227/bookings/pkg/config"
+	"github.com/Yuta0227/bookings/internal/config"
 	// Importing custom handlers package
-	"github.com/Yuta0227/bookings/pkg/handlers"
+	"github.com/Yuta0227/bookings/internal/handlers"
 	// Importing chi router for routing HTTP requests
 	"github.com/go-chi/chi"
 	// Importing middleware from chi for additional functionality
@@ -16,7 +16,7 @@ import (
 // routes sets up the HTTP routes for the application
 // It takes a pointer to AppConfig as an argument to access the application configuration
 func routes(app *config.AppConfig) http.Handler {
-	
+
 	// Initialize a new chi router (multiplexer)
 	mux := chi.NewRouter()
 
@@ -43,6 +43,7 @@ func routes(app *config.AppConfig) http.Handler {
 	// Route for searching availability
 	mux.Get("/search-availability", handlers.Repo.Availability)
 	mux.Post("/search-availability", handlers.Repo.PostAvailability)
+	mux.Post("/search-availability-json", handlers.Repo.AvailabilityJSON)
 	// Route for making a reservation
 	mux.Get("/make-reservation", handlers.Repo.MakeReservation)
 	// Serve static files (like CSS, JS, images) from the "./static" directory

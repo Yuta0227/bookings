@@ -6,9 +6,10 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/Yuta0227/bookings/internal/config"
+	"github.com/Yuta0227/bookings/internal/models"
 	"github.com/justinas/nosurf"
-	"github.com/Yuta0227/bookings/pkg/config"
-	"github.com/Yuta0227/bookings/pkg/models"
 )
 
 var app *config.AppConfig
@@ -19,32 +20,32 @@ func NewTemplates(a *config.AppConfig) {
 }
 
 func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
-    td.CSRFToken = nosurf.Token(r)
-    return td
+	td.CSRFToken = nosurf.Token(r)
+	return td
 }
 
 func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) {
-    var templateCache map[string]*template.Template
-    if app.UseCache {
-        templateCache = app.TemplateCache
-    } else {
-        templateCache, _ = CreateTemplateCache()
-    }
+	var templateCache map[string]*template.Template
+	if app.UseCache {
+		templateCache = app.TemplateCache
+	} else {
+		templateCache, _ = CreateTemplateCache()
+	}
 
-    template, ok := templateCache[tmpl]
-    if !ok {
-        log.Println("Could not get template from template cache")
-        return
-    }
+	template, ok := templateCache[tmpl]
+	if !ok {
+		log.Println("Could not get template from template cache")
+		return
+	}
 
-    buf := new(bytes.Buffer)
+	buf := new(bytes.Buffer)
 	td = AddDefaultData(td, r)
 	_ = template.Execute(buf, td)
 	// render the template
 	_, err := buf.WriteTo(w)
-    if err != nil {
+	if err != nil {
 		log.Println("Error writing template to browser", err)
-    }
+	}
 }
 
 func CreateTemplateCache() (map[string]*template.Template, error) {

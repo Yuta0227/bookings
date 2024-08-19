@@ -7,13 +7,13 @@ import (
 	"time"
 
 	// Custom configuration package
-	"github.com/Yuta0227/bookings/pkg/config"
+	"github.com/Yuta0227/bookings/internal/config"
 
 	// Custom handlers package
-	"github.com/Yuta0227/bookings/pkg/handlers"
+	"github.com/Yuta0227/bookings/internal/handlers"
 
 	// Custom template rendering package
-	"github.com/Yuta0227/bookings/pkg/render"
+	"github.com/Yuta0227/bookings/internal/render"
 
 	// Session management package
 	"github.com/alexedwards/scs/v2"
