@@ -41,7 +41,8 @@ func routes(app *config.AppConfig) http.Handler {
 	// Route for making a reservation
 	mux.Get("/reservation", handlers.Repo.Reservation)
 	// Route for searching availability
-	mux.Get("/search-availability", handlers.Repo.SearchAvailability)
+	mux.Get("/search-availability", handlers.Repo.Availability)
+	mux.Post("/search-availability", handlers.Repo.PostAvailability)
 	// Route for making a reservation
 	mux.Get("/make-reservation", handlers.Repo.MakeReservation)
 	// Serve static files (like CSS, JS, images) from the "./static" directory
