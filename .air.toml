@@ -2,6 +2,7 @@ root="."
 [build]
   include_ext = ["go", "tpl", "tmpl", "html"]
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
+  bin = "./tmp/main.exe"
   cmd="go build -o ./tmp/main.exe ./cmd/web"
 [log]
   main_only=false
