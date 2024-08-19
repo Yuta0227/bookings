@@ -38,14 +38,13 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/majors-suite", handlers.Repo.Majors)
 	// Route for the contact page
 	mux.Get("/contact", handlers.Repo.Contact)
-	// Route for making a reservation
-	mux.Get("/reservation", handlers.Repo.Reservation)
 	// Route for searching availability
 	mux.Get("/search-availability", handlers.Repo.Availability)
 	mux.Post("/search-availability", handlers.Repo.PostAvailability)
 	mux.Post("/search-availability-json", handlers.Repo.AvailabilityJSON)
 	// Route for making a reservation
-	mux.Get("/make-reservation", handlers.Repo.MakeReservation)
+	mux.Get("/make-reservation", handlers.Repo.Reservation)
+	mux.Post("/make-reservation", handlers.Repo.PostReservation)
 	// Serve static files (like CSS, JS, images) from the "./static" directory
 	// Create a file server for the "static" directory
 	fileServer := http.FileServer(http.Dir("./static"))
