@@ -3,12 +3,12 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"log"
-	"net/http"
 	"github.com/Yuta0227/bookings/internal/config"
+	"github.com/Yuta0227/bookings/internal/forms"
 	"github.com/Yuta0227/bookings/internal/models"
 	"github.com/Yuta0227/bookings/internal/render"
-	"github.com/Yuta0227/bookings/internal/forms"
+	"log"
+	"net/http"
 )
 
 // Repository is the repository type
@@ -60,8 +60,6 @@ func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "contact.page.tmpl", &models.TemplateData{})
 }
 
-
-
 func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "search-availability.page.tmpl", &models.TemplateData{})
 }
@@ -91,8 +89,12 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
+	var emptyReservation models.Reservation
+	data := make(map[string]interface{})
+	data["reservation"] = emptyReservation
 	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{
 		Form: forms.New(nil),
+		Data: data,
 	})
 }
 
@@ -101,5 +103,23 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 		return
-	}	
+	}
+	reservation := models.Reservation{
+		FirstName: r.Form.Get("first_name"),
+		LastName:  r.Form.Get("last_name"),
+		Phone:     r.Form.Get("phone"),
+		Email:     r.Form.Get("email"),
+	}
+	form := forms.New(r.PostForm)
+	form.Required("first_name", "last_name", "email")
+	form.MinLength("first_name", 3, r)
+	form.IsEmail("email")
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["reservation"] = reservation
+		render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+	}
 }
